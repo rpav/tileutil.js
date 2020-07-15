@@ -1,0 +1,25 @@
+{
+  "name": "tileutils",
+  "version": "1.0.0",
+  "description": "Split an image into tiles",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "bin": {
+    "tilesplit": "./tilesplit.js",
+    "maketileset": "./maketileset.js",
+    "makeatlas": "./makeatlas.js",
+    "tileutil": "./tileutil.js"
+  },
+  "author": "Ryan Pavlik <rpavlik@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "cbor": "^5.0.2",
+    "glob": "^7.1.6",
+    "hexdump-nodejs": "^0.1.0",
+    "maxrects-packer": "*",
+    "sharp": "*",
+    "yargs": "^15.4.0"
+  }
+}
