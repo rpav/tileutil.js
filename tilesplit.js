@@ -43,8 +43,8 @@ img.metadata()
           .extract({
             left: x,
             top: y,
-            width: Opt.size.x,
-            height: Opt.size.y
+            width: args.W,
+            height: args.H,
           })
           .toFile(n.toString() + '.png')
           ++n
