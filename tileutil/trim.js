@@ -1,6 +1,4 @@
-const {
-  say
-} = require('../util');
+const { say } = require('../util');
 
 const sharp = require('sharp');
 
@@ -30,35 +28,42 @@ async function TrimAlpha(info, im) {
     h: info.height
   };
 
-  let data = await im.raw().toBuffer();
+  let data = await im.ensureAlpha().raw().toBuffer();
+
+  if (!info.hasAlpha) {
+    return { info: { srcSize: size, rect: { x: 0, y: 0, ...size } }, data: data };
+  }
+
   let topY = 0;
   let botY = size.h - 1;
   let lX = 0;
   let rX = size.w - 1;
 
   for (; topY < size.h; ++topY) {
-    if (!isRowBlank(size, data, topY))
-      break;
+    if (!isRowBlank(size, data, topY)) break;
   }
   for (; botY > topY; --botY) {
-    if (!isRowBlank(size, data, botY))
-      break;
+    if (!isRowBlank(size, data, botY)) break;
   }
   for (; lX < size.w; ++lX) {
-    if (!isColBlank(size, data, lX))
-      break;
+    if (!isColBlank(size, data, lX)) break;
   }
   for (; rX > lX; --rX) {
-    if (!isColBlank(size, data, rX))
-      break;
+    if (!isColBlank(size, data, rX)) break;
   }
 
   let w = rX - lX + 1;
   let h = botY - topY + 1;
 
   // In the case of completely-blank tiles, reserve 1x1
-  if(w == 0) { lX = 0; w = 1; }
-  if(h == 0) { topY = 0; h = 1; }
+  if (w == 0) {
+    lX = 0;
+    w = 1;
+  }
+  if (h == 0) {
+    topY = 0;
+    h = 1;
+  }
 
   let r = {
     info: {
@@ -68,11 +73,11 @@ async function TrimAlpha(info, im) {
   }
 
   let promise = im
-      .extract({ left: lX, top: topY, width: w, height: h })
-      .ensureAlpha().raw().toBuffer().then(buf => {
-        r.data = buf;
-        return r;
-      });
+    .extract({ left: lX, top: topY, width: w, height: h })
+    .ensureAlpha().raw().toBuffer().then(buf => {
+      r.data = buf;
+      return r;
+    });
 
   return promise;
 }
